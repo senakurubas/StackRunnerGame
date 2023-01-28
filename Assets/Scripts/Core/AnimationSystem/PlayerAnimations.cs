@@ -1,5 +1,5 @@
-using System;
 using Core.InputSystem;
+using Core.LevelEndSystem;
 using UnityEngine;
 
 namespace Core.AnimationSystem
@@ -10,8 +10,17 @@ namespace Core.AnimationSystem
         
         private static readonly int IsRunning = Animator.StringToHash("IsRunning");
 
+        private GameManager _gameManager;
+        private bool _levelEnded;
+
+        private void Awake()
+        {
+            _gameManager = FindObjectOfType<GameManager>();
+        }
+
         private void SetRunningAnimation()
         {
+            if (_levelEnded) return;
             animator.SetBool(IsRunning, true);
         }
 
@@ -20,16 +29,26 @@ namespace Core.AnimationSystem
             animator.SetBool(IsRunning, false);
         }
 
+        private void StopAnimations()
+        {
+            _levelEnded = true;
+            StopRunningAnimation();
+        }
+
         private void OnEnable()
         {
             InputManager.onMouseButtonDown += SetRunningAnimation;
             InputManager.onMouseButtonUp += StopRunningAnimation;
+            _gameManager.OnLevelSuccess += StopAnimations;
+            _gameManager.OnLevelFailed += StopAnimations;
         }
 
         private void OnDisable()
         {
             InputManager.onMouseButtonDown -= SetRunningAnimation;
             InputManager.onMouseButtonUp -= StopRunningAnimation;
+            _gameManager.OnLevelSuccess -= StopAnimations;
+            _gameManager.OnLevelFailed -= StopAnimations;
         }
 
         private void OnDestroy()

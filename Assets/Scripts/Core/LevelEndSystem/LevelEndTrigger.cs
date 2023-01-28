@@ -9,13 +9,20 @@ namespace Core.LevelEndSystem
 {
     public class LevelEndTrigger : MonoBehaviour
     {
-        public static event Action onLevelEndStart;
-        
+        private AudioManager _audioManager;
+        private GameManager _gameManager;
+
+        private void Awake()
+        {
+            _audioManager = FindObjectOfType<AudioManager>();
+            _gameManager = FindObjectOfType<GameManager>();
+        }
+
         private void OnTriggerEnter(Collider other)
         {
             if (other.TryGetComponent(out Player player))
             {
-                FindObjectOfType<AudioManager>().Play("LevelEnd");
+                _audioManager.Play("LevelEnd");
                 
                 if (player.TryGetComponent(out PlayerMover playerMover))
                 {
@@ -31,8 +38,8 @@ namespace Core.LevelEndSystem
                 {
                     StartCoroutine(collector.LevelEndOrder(transform.position + transform.forward * 1f));
                 }
-                
-                onLevelEndStart?.Invoke();
+
+                _gameManager.GameStart();
             }
         }
     }
