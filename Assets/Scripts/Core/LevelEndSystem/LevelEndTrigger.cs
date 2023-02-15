@@ -22,7 +22,6 @@ namespace Core.LevelEndSystem
         {
             if (other.TryGetComponent(out Player player))
             {
-                //_gameManager.LevelSuccess();
                 _audioManager.Play("LevelEnd");
                 
                 if (player.TryGetComponent(out PlayerMover playerMover))
@@ -37,7 +36,7 @@ namespace Core.LevelEndSystem
 
                 if (player.TryGetComponent(out Collector collector))
                 {
-                    StartCoroutine(collector.LevelEndOrder(transform.position + transform.forward * 1f));
+                    StartCoroutine(collector.LevelEndOrder(transform.position + transform.forward * 0.2f));
                 }
 
                 _gameManager.GameStart();
