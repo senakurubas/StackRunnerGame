@@ -22,6 +22,7 @@ namespace Core.LevelEndSystem
         {
             if (other.TryGetComponent(out Player player))
             {
+                //_gameManager.LevelSuccess();
                 _audioManager.Play("LevelEnd");
                 
                 if (player.TryGetComponent(out PlayerMover playerMover))

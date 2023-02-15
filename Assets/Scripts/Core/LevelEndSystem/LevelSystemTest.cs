@@ -10,14 +10,24 @@ namespace Core.LevelEndSystem
         {
             _gameManager = FindObjectOfType<GameManager>();
         }
-        
+
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Space))
-                _gameManager.LevelSuccess();
-            
+            //if (Input.GetKeyDown(KeyCode.Space))
+            // _gameManager.LevelSuccess();
+
+
             if (Input.GetKeyDown(KeyCode.R))
                 SceneController.LoadCurrentLevel();
         }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.TryGetComponent(out LevelEndTrigger levelEndTrigger))
+            {
+                _gameManager.LevelSuccess();
+            }
+        }
+
     }
 }
